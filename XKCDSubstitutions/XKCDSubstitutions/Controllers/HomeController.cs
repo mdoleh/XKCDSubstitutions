@@ -34,7 +34,18 @@ namespace XKCDSubstitutions.Controllers
         public string GetContent(string url)
         {
             var result = doGet(url);
-            return processGetResponse(result.Result, url);
+            return replaceWords(processGetResponse(result.Result, url));
+        }
+
+        private string replaceWords(string page)
+        {
+            var wordsToReplace = new List<string>("witnesses.allegedy.new study.rebuild.space.google glass.smartphone.electric.senator.car.election.congressional leaders.homeland security.could not be reached for comment".Split('.'));
+            var replacementWords = new List<string>("these dudes I know.kinda probably.tumblr post.avenge.spaaace.virtual boy.pokedex.atomic.elf-lord.cat.eating contest.river spirits.homestar runner.is guilty and everyone knows it".Split('.'));
+            for (int i = 0; i < wordsToReplace.Count; ++i)
+            {
+                page = page.Replace(wordsToReplace[i], replacementWords[i]);
+            }
+            return page;
         }
 
         private async Task<string> doGet(string url)
