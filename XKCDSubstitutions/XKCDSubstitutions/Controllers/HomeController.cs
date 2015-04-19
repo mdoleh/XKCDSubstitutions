@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -39,11 +40,11 @@ namespace XKCDSubstitutions.Controllers
 
         private string replaceWords(string page)
         {
-            var wordsToReplace = new List<string>("witnesses.allegedy.new study.rebuild.space.google glass.smartphone.electric.senator.car.election.congressional leaders.homeland security.could not be reached for comment".Split('.'));
-            var replacementWords = new List<string>("these dudes I know.kinda probably.tumblr post.avenge.spaaace.virtual boy.pokedex.atomic.elf-lord.cat.eating contest.river spirits.homestar runner.is guilty and everyone knows it".Split('.'));
-            for (int i = 0; i < wordsToReplace.Count; ++i)
+            var wordsToReplace = new List<string>("democrats.republicans.witnesses.allegedy.new study.rebuild.space.google glass.smartphone.electric.senator.car.election.congressional leaders.homeland security.could not be reached for comment".Split('.'));
+            var replacementWords = new List<string>("monkeys.apes.these dudes I know.kinda probably.tumblr post.avenge.spaaace.virtual boy.pokedex.atomic.elf-lord.cat.eating contest.river spirits.homestar runner.is guilty and everyone knows it".Split('.'));
+            for (var i = 0; i < wordsToReplace.Count; ++i)
             {
-                page = page.Replace(wordsToReplace[i], replacementWords[i]);
+                page = ReplaceString(page, wordsToReplace[i], "<b>" + replacementWords[i] + "</b>", StringComparison.OrdinalIgnoreCase);
             }
             return page;
         }
@@ -86,6 +87,26 @@ namespace XKCDSubstitutions.Controllers
                 }
             }
             return doc.DocumentNode.OuterHtml;
+        }
+
+        public static string ReplaceString(string str, string oldValue, string newValue, StringComparison comparison)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            int previousIndex = 0;
+            int index = str.IndexOf(oldValue, comparison);
+            while (index != -1)
+            {
+                sb.Append(str.Substring(previousIndex, index - previousIndex));
+                sb.Append(newValue);
+                index += oldValue.Length;
+
+                previousIndex = index;
+                index = str.IndexOf(oldValue, index, comparison);
+            }
+            sb.Append(str.Substring(previousIndex));
+
+            return sb.ToString();
         }
     }
 }
