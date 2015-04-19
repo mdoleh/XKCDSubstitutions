@@ -22,7 +22,6 @@ namespace XKCDSubstitutions.Controllers
         [HttpGet]
         public string GetContent(string url)
         {
-            url = cleanURL(url);
             var result = doGet(url);
             return string.IsNullOrEmpty(result.Result) ? "" : replaceWords(processGetResponse(result.Result, url));
         }
@@ -39,8 +38,8 @@ namespace XKCDSubstitutions.Controllers
 
         private string replaceWords(string page)
         {
-            var wordsToReplace = new List<string>("weeks.EU.case against.microsoft.apple.google.billion.million.senate.democrats.republicans.witnesses.allegedy.new study.rebuild.space.google glass.smartphone.electric.senator.car.election.congressional leaders.homeland security.could not be reached for comment".Split('.'));
-            var replacementWords = new List<string>("fortnights.dat EU.duel against.a former Bill Gates company.a former Steve Jobs company.our lord and savior google.ba-jillion.zillion.jedi council.monkeys.giraffes.these dudes I know.kinda probably.tumblr post.avenge.spaaace.virtual boy.pokedex.atomic.elf-lord.cat.eating contest.river spirits.homestar runner.is guilty and everyone knows it".Split('.'));
+            var wordsToReplace = new List<string>("congressman.Marilyn Monroe.weeks.EU.case against.microsoft.apple.google.billion.million.senate.democrats.republicans.witnesses.allegedy.new study.rebuild.space.google glass.smartphone.electric.senator.car.election.congressional leaders.homeland security.could not be reached for comment".Split('.'));
+            var replacementWords = new List<string>("pirate.Justin Beiber.fortnights.dat EU.duel against.a former Bill Gates company.a former Steve Jobs company.our lord and savior google.ba-jillion.zillion.jedi council.monkeys.giraffes.these dudes I know.kinda probably.tumblr post.avenge.spaaace.virtual boy.pokedex.atomic.elf-lord.cat.eating contest.river spirits.homestar runner.is guilty and everyone knows it".Split('.'));
             for (var i = 0; i < wordsToReplace.Count; ++i)
             {
                 page = ReplaceString(page, wordsToReplace[i], "<b>" + replacementWords[i] + "</b>", StringComparison.OrdinalIgnoreCase);
@@ -59,6 +58,7 @@ namespace XKCDSubstitutions.Controllers
 
         private string processGetResponse(string response, string srcURL)
         {
+            srcURL = cleanURL(srcURL);
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(response);
             foreach (HtmlNode stylesheet in doc.DocumentNode.SelectNodes("//link[@href]"))
